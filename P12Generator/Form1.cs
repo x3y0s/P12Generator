@@ -18,11 +18,11 @@ namespace P12Generator
             textBoxCertificatePath.Text = dialog.FileName;
         }
 
-        private void button1_Generate(object sender, EventArgs e)
+        private void buttonGenerate_Click(object sender, EventArgs e)
         {
             string certPath = textBoxCertificatePath.Text;
             string pemFile = "certificate.pem";
-            string p12File = "exctracted.p12";
+            string p12File = "extracted.p12";
             string privateKeyFile = "privateKey.key";
 
             if (PreChecks() == false)
@@ -44,7 +44,7 @@ namespace P12Generator
 
             if (File.Exists(p12File) == false)
             {
-                Show("Errore estrazione generazione del file P12!!!");
+                Show("Errore generazione del file P12!!!");
                 return;
             }
 
@@ -58,9 +58,17 @@ namespace P12Generator
 
             List<string> lines = privateKey.Split(new char[] { '\n', }).ToList();
 
+            //check delimiters
             if (lines.FirstOrDefault() != keyHeader || lines.LastOrDefault() != keyEnd)
                 return false;
+
+            //"trim" it
+            lines = lines.Skip(1).SkipLast(1).ToList();
             
+            //check content
+            if(lines.Any() == false)
+                return false;
+
             return true;
         }
 

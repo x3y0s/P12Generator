@@ -116,7 +116,7 @@
             this.button_Generate.TabIndex = 6;
             this.button_Generate.Text = "GENERA P12";
             this.button_Generate.UseVisualStyleBackColor = true;
-            this.button_Generate.Click += new System.EventHandler(this.button1_Generate);
+            this.button_Generate.Click += new System.EventHandler(this.buttonGenerate_Click);
             // 
             // Form1
             // 
