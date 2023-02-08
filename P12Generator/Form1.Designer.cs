@@ -36,7 +36,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button_Generate = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -107,22 +107,22 @@
             this.label2.TabIndex = 4;
             this.label2.Text = "Copiare all\'interno del box la CHIAVE PRIVATA";
             // 
-            // button1
+            // button_Generate
             // 
-            this.button1.Location = new System.Drawing.Point(12, 506);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(671, 69);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "GENERA P12";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button_Generate.Location = new System.Drawing.Point(12, 506);
+            this.button_Generate.Name = "button_Generate";
+            this.button_Generate.Size = new System.Drawing.Size(671, 69);
+            this.button_Generate.TabIndex = 6;
+            this.button_Generate.Text = "GENERA P12";
+            this.button_Generate.UseVisualStyleBackColor = true;
+            this.button_Generate.Click += new System.EventHandler(this.button1_Generate);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(696, 587);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.button_Generate);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -148,6 +148,6 @@
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private Label label2;
-        private Button button1;
+        private Button button_Generate;
     }
 }

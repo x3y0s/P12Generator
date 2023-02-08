@@ -18,8 +18,13 @@ namespace P12Generator
             textBoxCertificatePath.Text = dialog.FileName;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Generate(object sender, EventArgs e)
         {
+            string certPath = textBoxCertificatePath.Text;
+            string pemFile = "certificate.pem";
+            string p12File = "exctracted.p12";
+            string privateKeyFile = "privateKey.key";
+
             if (string.IsNullOrEmpty(textBoxCertificatePath.Text) || string.IsNullOrEmpty(richTextBoxPrivateKey.Text))
             {
                 Show("Percorso certificato e chiave privata richiesti!!!");
@@ -31,11 +36,6 @@ namespace P12Generator
                 Show("Chiave privata NON VALIDA!!!");
                 return;
             }
-
-            string certPath = textBoxCertificatePath.Text;
-            string pemFile = "certificate.pem";
-            string p12File = "exctracted.p12";
-            string privateKeyFile = "privateKey.key";
 
             File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
 
@@ -60,7 +60,7 @@ namespace P12Generator
             Show($"FILE P12 GENERATO CORRETTAMENTE AL PERCORSO \n\n {Path.GetFullPath(p12File)}");
         }
 
-        private bool VerifyPrivateKey(string privateKey)
+        private static bool VerifyPrivateKey(string privateKey)
         {
             string keyHeader = "-----BEGIN PRIVATE KEY-----";
             string keyEnd = "-----END PRIVATE KEY-----";
