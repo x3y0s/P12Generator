@@ -39,7 +39,7 @@ namespace P12Generator
 
             File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
 
-            var pemProcess = Process.Start(@"OpenSSL\openssl.exe", $"x509 -in {textBoxCertificatePath.Text} -inform DER -out {pemFile} -outform PEM");
+            var pemProcess = Process.Start(@"OpenSSL\openssl.exe", $"x509 -in {certPath} -inform DER -out {pemFile} -outform PEM");
             pemProcess.WaitForExit();
 
             if (File.Exists(pemFile) == false)
