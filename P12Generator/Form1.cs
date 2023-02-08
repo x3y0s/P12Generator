@@ -25,17 +25,8 @@ namespace P12Generator
             string p12File = "exctracted.p12";
             string privateKeyFile = "privateKey.key";
 
-            if (string.IsNullOrEmpty(textBoxCertificatePath.Text) || string.IsNullOrEmpty(richTextBoxPrivateKey.Text))
-            {
-                Show("Percorso certificato e chiave privata richiesti!!!");
+            if (PreChecks() == false)
                 return;
-            }
-
-            if(VerifyPrivateKey(richTextBoxPrivateKey.Text) == false) 
-            {
-                Show("Chiave privata NON VALIDA!!!");
-                return;
-            }
 
             File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
 
@@ -75,5 +66,28 @@ namespace P12Generator
 
         private void Show(string msg)
             => MessageBox.Show(this, msg);
+
+        private bool PreChecks()
+        {
+            if (string.IsNullOrEmpty(textBoxCertificatePath.Text) || string.IsNullOrEmpty(richTextBoxPrivateKey.Text))
+            {
+                Show("Percorso certificato e chiave privata richiesti!!!");
+                return false;
+            }
+
+            if (VerifyPrivateKey(richTextBoxPrivateKey.Text) == false)
+            {
+                Show("Chiave privata NON VALIDA!!!");
+                return false;
+            }
+
+            if (File.Exists(textBoxCertificatePath.Text) == false)
+            {
+                Show("Il certificato NON ESISTE!!!");
+                return false;
+            }
+
+            return true;
+        }
     }
 }

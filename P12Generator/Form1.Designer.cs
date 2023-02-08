@@ -43,6 +43,7 @@
             // 
             // textBoxCertificatePath
             // 
+            this.textBoxCertificatePath.AllowDrop = true;
             this.textBoxCertificatePath.Location = new System.Drawing.Point(178, 31);
             this.textBoxCertificatePath.Name = "textBoxCertificatePath";
             this.textBoxCertificatePath.Size = new System.Drawing.Size(400, 23);
