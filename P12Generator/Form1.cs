@@ -38,9 +38,9 @@ namespace P12Generator
             string privateKeyFile = "privateKey.key";
 
             File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
-            Process.Start(@"OpenSSL\openssl.exe", $"x509 -in {textBoxCertificatePath.Text} -inform DER -out {pemFile} -outform PEM");
 
-            Thread.Sleep(1000);
+            var pemProcess = Process.Start(@"OpenSSL\openssl.exe", $"x509 -in {textBoxCertificatePath.Text} -inform DER -out {pemFile} -outform PEM");
+            pemProcess.WaitForExit();
 
             if (File.Exists(pemFile) == false)
             {
@@ -57,7 +57,7 @@ namespace P12Generator
                 return;
             }
 
-            Show($"FILE P12 GENERATO CORRETTAMENTE AL PERCORSO \n {Path.GetFullPath(p12File)}");
+            Show($"FILE P12 GENERATO CORRETTAMENTE AL PERCORSO \n\n {Path.GetFullPath(p12File)}");
         }
 
         private bool VerifyPrivateKey(string privateKey)
