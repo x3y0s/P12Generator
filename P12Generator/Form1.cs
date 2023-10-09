@@ -25,12 +25,16 @@ namespace P12Generator
             string p12File = "extracted.p12";
             string privateKeyFile = "privateKey.key";
 
-            if (PreChecks() == false)
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string opensslPath = @"OpenSSL\openssl.exe";
+            string processPath = Path.Combine(basePath, opensslPath);
+
+            if (PreChecks(processPath) == false)
                 return;
 
             File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
 
-            var pemProcess = Process.Start(@"OpenSSL\openssl.exe", $"x509 -in {certPath} -inform DER -out {pemFile} -outform PEM");
+            var pemProcess = Process.Start(processPath, $"x509 -in {certPath} -inform DER -out {pemFile} -outform PEM");
             pemProcess.WaitForExit();
 
             if (File.Exists(pemFile) == false)
@@ -39,7 +43,7 @@ namespace P12Generator
                 return;
             }
 
-            var process = Process.Start(@"OpenSSL\openssl.exe", $"pkcs12 -export -out {p12File} -inkey {privateKeyFile} -in {pemFile}");
+            var process = Process.Start(processPath, $"pkcs12 -export -out {p12File} -inkey {privateKeyFile} -in {pemFile}");
             process.WaitForExit();
 
             if (File.Exists(p12File) == false)
@@ -75,7 +79,7 @@ namespace P12Generator
         private void Show(string msg)
             => MessageBox.Show(this, msg);
 
-        private bool PreChecks()
+        private bool PreChecks(string processPath)
         {
             if (string.IsNullOrEmpty(textBoxCertificatePath.Text) || string.IsNullOrEmpty(richTextBoxPrivateKey.Text))
             {
@@ -92,6 +96,12 @@ namespace P12Generator
             if (File.Exists(textBoxCertificatePath.Text) == false)
             {
                 Show("Il certificato NON ESISTE!!!");
+                return false;
+            }
+
+            if (File.Exists(processPath) == false)
+            {
+                Show($"Eseguibile di OpenSSL non presente al percorso {processPath}");
                 return false;
             }
 

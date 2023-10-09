@@ -7,47 +7,15 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>lock.ico</ApplicationIcon>
+    <Version>$(VersionPrefix)1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="lock.ico" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="OpenSSL\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="OpenSSL\CA.pl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\capi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\dasync.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\libcrypto-1_1-x64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\libssl-1_1-x64.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\openssl.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\ossltest.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\padlock.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\progs.pl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="OpenSSL\tsget.pl">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir $(TargetDir)\OpenSSL&#xD;&#xA;XCOPY &quot;$(ProjectDir)OpenSSL&quot; &quot;$(TargetDir)OpenSSL&quot; /E /Y" />
+  </Target>
 
 </Project>
