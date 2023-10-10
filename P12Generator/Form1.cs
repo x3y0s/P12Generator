@@ -7,7 +7,7 @@ namespace P12Generator
         public Form1()
         {
             InitializeComponent();
-            StartPosition= FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.CenterScreen;
         }
 
         private void buttonSearchCertificate_Click(object sender, EventArgs e)
@@ -22,37 +22,45 @@ namespace P12Generator
         {
             string certPath = textBoxCertificatePath.Text;
             string pemFile = "certificate.pem";
-            string p12File = "extracted.p12";
             string privateKeyFile = "privateKey.key";
 
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string opensslPath = @"OpenSSL\openssl.exe";
             string processPath = Path.Combine(basePath, opensslPath);
 
-            if (PreChecks(processPath) == false)
-                return;
-
-            File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
-
-            var pemProcess = Process.Start(processPath, $"x509 -in {certPath} -inform DER -out {pemFile} -outform PEM");
-            pemProcess.WaitForExit();
-
-            if (File.Exists(pemFile) == false)
+            try
             {
-                Show("Errore estrazione del file PEM dal certificato!!!");
-                return;
+                if (PreChecks(processPath) == false) return;
+
+                File.WriteAllText(privateKeyFile, richTextBoxPrivateKey.Text);
+
+                var pemProcess = Process.Start(processPath, $"x509 -in {certPath} -inform DER -out {pemFile} -outform PEM");
+                pemProcess.WaitForExit();
+
+                if (File.Exists(pemFile) == false)
+                {
+                    Show("Errore estrazione del file PEM dal certificato!!!");
+                    return;
+                }
+
+                string p12File = $"{Path.GetFileNameWithoutExtension(textBoxCertificatePath.Text)}.p12";
+
+                var process = Process.Start(processPath, $"pkcs12 -export -out {p12File} -inkey {privateKeyFile} -in {pemFile}");
+                process.WaitForExit();
+
+                if (File.Exists(p12File) == false)
+                {
+                    Show("Errore generazione del file P12!!!");
+                    return;
+                }
+
+                Show($"FILE P12 GENERATO CORRETTAMENTE AL PERCORSO \n\n {Path.GetFullPath(p12File)}");
+            }
+            catch (Exception ex)
+            {
+                Show($"Errore: {ex}");
             }
 
-            var process = Process.Start(processPath, $"pkcs12 -export -out {p12File} -inkey {privateKeyFile} -in {pemFile}");
-            process.WaitForExit();
-
-            if (File.Exists(p12File) == false)
-            {
-                Show("Errore generazione del file P12!!!");
-                return;
-            }
-
-            Show($"FILE P12 GENERATO CORRETTAMENTE AL PERCORSO \n\n {Path.GetFullPath(p12File)}");
         }
 
         private static bool VerifyPrivateKey(string privateKey)
@@ -68,9 +76,9 @@ namespace P12Generator
 
             //"trim" it
             lines = lines.Skip(1).SkipLast(1).ToList();
-            
+
             //check content
-            if(lines.Any() == false)
+            if (lines.Any() == false)
                 return false;
 
             return true;
